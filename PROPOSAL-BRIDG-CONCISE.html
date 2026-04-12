@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-Native Design Team - Proposal for Bridg / Nimbl</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1A1A1A;
+  --paper: #F5F0E8;
+  --surface: #FDFBF7;
+  --terracotta: #B85C38;
+  --terracotta-light: rgba(184, 92, 56, 0.08);
+  --forest: #1B4332;
+  --forest-light: rgba(27, 67, 50, 0.08);
+  --muted: #6B7280;
+  --border: #E5DDD0;
+  --border-light: #EDE8DF;
+  --shadow-glow: 0 8px 40px rgba(27, 67, 50, 0.12), 0 4px 12px rgba(27, 67, 50, 0.06);
+  --serif: "Instrument Serif", Georgia, serif;
+  --sans: "Plus Jakarta Sans", system-ui, sans-serif;
+  --mono: "JetBrains Mono", monospace;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 17px; scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+
+body {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.65;
+}
+
+body::after {
+  content: "";
+  position: fixed; inset: 0;
+  opacity: 0.3; pointer-events: none; z-index: 9999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+.top-bar {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--terracotta), var(--forest));
+  z-index: 1000;
+}
+
+.container {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 72px 32px 96px;
+  position: relative;
+  z-index: 1;
+}
+
+/* HEADER */
+.header { margin-bottom: 56px; padding-bottom: 36px; border-bottom: 1px solid var(--border); }
+.label {
+  font-family: var(--mono); font-size: 0.62rem; font-weight: 500;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--terracotta); margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.label::before { content: ""; display: inline-block; width: 6px; height: 6px; background: var(--terracotta); border-radius: 50%; }
+
+h1 {
+  font-family: var(--serif);
+  font-size: 2.9rem;
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  margin-bottom: 16px;
+}
+h1 .accent { color: var(--terracotta); font-style: italic; }
+
+.hero-sub {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  font-style: italic;
+  color: var(--muted);
+  margin-bottom: 28px;
+  line-height: 1.4;
+  max-width: 620px;
+}
+
+.meta {
+  display: flex; flex-wrap: wrap; gap: 24px;
+  font-family: var(--mono); font-size: 0.68rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+.meta strong { color: var(--ink); font-weight: 500; }
+
+/* SECTIONS */
+.section { margin-bottom: 56px; }
+h2 {
+  font-family: var(--serif);
+  font-size: 1.7rem;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  margin-bottom: 14px;
+}
+.section-label {
+  font-family: var(--mono); font-size: 0.6rem; font-weight: 500;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--terracotta); margin-bottom: 10px; display: block;
+}
+p { margin-bottom: 14px; font-size: 0.95rem; }
+strong { font-weight: 700; }
+
+/* MECHANISM */
+.mechanism {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--forest);
+  border-radius: 12px;
+  padding: 32px 34px;
+  margin: 24px 0;
+}
+.mech-name {
+  font-family: var(--serif);
+  font-size: 1.9rem;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  margin-bottom: 10px;
+}
+.mech-name .accent { color: var(--terracotta); font-style: italic; }
+.mech-value {
+  display: inline-block; margin-top: 14px;
+  padding: 8px 16px;
+  background: var(--forest); color: var(--paper);
+  font-family: var(--mono); font-size: 0.68rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  border-radius: 6px; font-weight: 500;
+}
+
+/* VALUE STACK */
+.stack {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 20px 0;
+  background: var(--surface);
+}
+.stack-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 20px;
+  padding: 14px 22px;
+  border-bottom: 1px solid var(--border-light);
+  align-items: baseline;
+  font-size: 0.88rem;
+}
+.stack-row:last-of-type { border-bottom: none; }
+.stack-val {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--forest);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.stack-total {
+  background: var(--forest-light);
+  padding: 18px 22px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 20px;
+  align-items: baseline;
+  border-top: 2px solid var(--forest);
+  font-family: var(--serif);
+  color: var(--forest);
+}
+.stack-total .label-text { font-size: 1rem; }
+.stack-total .value-text { font-size: 1.4rem; letter-spacing: -0.02em; }
+
+.stack-price {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 22px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 20px;
+  align-items: baseline;
+}
+.stack-price .tag {
+  font-family: var(--mono); font-size: 0.62rem;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(245, 240, 232, 0.6);
+  margin-bottom: 4px;
+}
+.stack-price .sub { font-size: 0.78rem; color: rgba(245, 240, 232, 0.7); margin-top: 4px; }
+.stack-price .price {
+  font-family: var(--serif); font-size: 2.2rem;
+  font-weight: 400; letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+/* TIERS */
+.tiers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 24px 0;
+}
+.tier {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 22px 18px;
+  position: relative;
+  transition: all 0.3s var(--ease-out);
+}
+.tier:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(26,26,26,0.08); }
+.tier.rec {
+  border-color: var(--forest);
+  border-top: 3px solid var(--forest);
+  box-shadow: var(--shadow-glow);
+  transform: translateY(-3px);
+}
+.tier-badge {
+  position: absolute; top: -11px; left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--mono);
+  font-size: 0.54rem; font-weight: 500;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  background: var(--forest); color: white;
+  padding: 4px 14px; border-radius: 20px; white-space: nowrap;
+}
+.tier-name {
+  font-family: var(--serif);
+  font-size: 1.2rem; font-weight: 400;
+  letter-spacing: -0.02em; margin-bottom: 2px;
+}
+.tier-anchor {
+  font-family: var(--mono); font-size: 0.66rem;
+  color: var(--muted); text-decoration: line-through;
+  margin-bottom: 2px;
+}
+.tier-price {
+  font-family: var(--serif);
+  font-size: 1.8rem; font-weight: 400;
+  letter-spacing: -0.03em; line-height: 1.1;
+  margin-bottom: 12px;
+}
+.tier-duration {
+  font-family: var(--mono); font-size: 0.62rem;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--terracotta);
+  padding-bottom: 12px; margin-bottom: 12px;
+  border-bottom: 1px solid var(--border-light);
+}
+.tier-what { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
+
+/* GUARANTEE */
+.guarantee {
+  background: var(--surface);
+  border: 2px solid var(--forest);
+  border-radius: 12px;
+  padding: 26px 30px;
+  margin: 24px 0;
+  text-align: center;
+}
+.guarantee-tag {
+  display: inline-block;
+  font-family: var(--mono); font-size: 0.58rem;
+  font-weight: 500; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--forest);
+  background: var(--forest-light);
+  padding: 5px 14px; border-radius: 20px;
+  border: 1px solid rgba(27, 67, 50, 0.2);
+  margin-bottom: 12px;
+}
+.guarantee h3 {
+  font-family: var(--serif); font-size: 1.35rem;
+  font-weight: 400; letter-spacing: -0.02em;
+  color: var(--forest); margin-bottom: 10px;
+}
+.guarantee p { font-size: 0.88rem; line-height: 1.6; margin: 0; max-width: 560px; margin: 0 auto; }
+
+/* CONTACT */
+.contact {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px 32px;
+  margin: 24px 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.contact::before {
+  content: "";
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--terracotta), var(--forest));
+}
+.contact .cta {
+  font-family: var(--serif); font-size: 1.4rem;
+  font-weight: 400; letter-spacing: -0.02em;
+  margin-bottom: 4px;
+}
+.contact .sub { font-size: 0.85rem; color: var(--muted); margin-bottom: 16px; }
+.contact .details {
+  display: flex; flex-wrap: wrap; gap: 20px;
+  justify-content: center;
+  padding-top: 16px; border-top: 1px solid var(--border-light);
+}
+.contact .details span { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); }
+.contact a { color: var(--forest); text-decoration: none; }
+.contact a:hover { color: var(--terracotta); }
+
+.footer {
+  margin-top: 56px; padding-top: 20px;
+  border-top: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 0.6rem; color: var(--muted);
+  text-align: center; line-height: 2;
+}
+
+/* RESPONSIVE */
+@media (max-width: 720px) {
+  .container { padding: 40px 20px 64px; }
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.35rem; }
+  .hero-sub { font-size: 1.05rem; }
+  .mech-name { font-size: 1.5rem; }
+  .mechanism { padding: 24px; }
+  .tiers { grid-template-columns: 1fr; }
+  .tier.rec { transform: none; }
+  .stack-row, .stack-total, .stack-price { grid-template-columns: 1fr; gap: 4px; }
+  .stack-val, .stack-total .value-text, .stack-price .price { text-align: left; }
+  .guarantee h3 { font-size: 1.15rem; }
+  .contact { padding: 22px 20px; }
+  .meta { gap: 14px; }
+}
+
+@media print {
+  .top-bar { display: none; }
+  body::after { display: none; }
+  .container { padding: 20px; max-width: 100%; }
+}
+</style>
+</head>
+<body>
+<div class="top-bar"></div>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="label">Executive Proposal</div>
+    <h1>Turn your 2-person UX team into a <span class="accent">5-person</span> output machine.</h1>
+    <p class="hero-sub">Without hiring. Without burnout. Without losing the craft that makes Nimbl good.</p>
+    <div class="meta">
+      <div><strong>For:</strong> Bridg / Nimbl</div>
+      <div><strong>From:</strong> Sjoerd Faesen</div>
+      <div><strong>Date:</strong> April 2026</div>
+      <div><strong>Status:</strong> Confidential</div>
+    </div>
+  </header>
+
+  <!-- 01 OPPORTUNITY -->
+  <section class="section">
+    <span class="section-label">01 / The Opportunity</span>
+    <h2>You are the rate limiter. AI fixes that.</h2>
+    <p>You have a small, senior UX and frontend team serving a growing product. Every sprint, they are the bottleneck. Every competitor shipping AI features is pulling further ahead. Hiring is slow, expensive, and does not solve the structural problem: <strong>the way design and engineering work together needs to change, not the headcount.</strong></p>
+    <p>This programme transforms how your team works with AI, on real Nimbl projects, in 8 to 16 weeks. Not theory. Not tool demos. A working system you own.</p>
+  </section>
+
+  <!-- 02 MECHANISM -->
+  <section class="section">
+    <span class="section-label">02 / The Unique Mechanism</span>
+    <h2>Everyone sells tool training. I built something else.</h2>
+    <div class="mechanism">
+      <div class="mech-name">The <span class="accent">Design OS</span></div>
+      <p>A living operating system of custom Claude Code skills built for design work. Each skill turns Claude Code into a specialist for a specific task: user interview analysis, persona synthesis, heuristic evaluation, competitive research, UX writing, research-grounded prototyping.</p>
+      <p>It is not a prompt library. It is a working system your team opens, uses, extends, and <strong>owns forever</strong>. When the engagement ends, the Design OS stays with you. This is the difference between renting AI capability and building it.</p>
+      <div class="mech-value">Standalone Value: &euro;12,500</div>
+    </div>
+  </section>
+
+  <!-- 03 VALUE STACK -->
+  <section class="section">
+    <span class="section-label">03 / What You Get (Transform)</span>
+    <h2>What it would cost to assemble this yourself.</h2>
+    <p>Market rates in Belgium and the Netherlands for each component, separately contracted.</p>
+
+    <div class="stack">
+      <div class="stack-row"><div>Design OS setup and permanent handoff</div><div class="stack-val">&euro;12,500</div></div>
+      <div class="stack-row"><div>48 hours 1-on-1 &amp; 1-on-2 coaching on real Nimbl work</div><div class="stack-val">&euro;14,400</div></div>
+      <div class="stack-row"><div>Code-based design system foundation with AI governance</div><div class="stack-val">&euro;6,500</div></div>
+      <div class="stack-row"><div>GitHub-based design-to-dev workflow setup</div><div class="stack-val">&euro;3,500</div></div>
+      <div class="stack-row"><div>Two half-day workshops for the broader team</div><div class="stack-val">&euro;4,000</div></div>
+      <div class="stack-row"><div>Process playbook + custom prompt library</div><div class="stack-val">&euro;5,500</div></div>
+      <div class="stack-row"><div>Org-wide AI playbook + session recordings</div><div class="stack-val">&euro;5,000</div></div>
+      <div class="stack-row"><div>16 weeks async support + quarterly leadership review</div><div class="stack-val">&euro;4,700</div></div>
+      <div class="stack-total">
+        <div class="label-text">Total Standalone Value</div>
+        <div class="value-text">&euro;56,100</div>
+      </div>
+      <div class="stack-price">
+        <div>
+          <div class="tag">Your Investment</div>
+          <div class="price">&euro;24,500</div>
+          <div class="sub">Transform tier. That is &euro;31,600 less than the parts. Excl. BTW.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 GUARANTEE -->
+  <section class="section">
+    <span class="section-label">04 / Risk Reversal</span>
+    <h2>I carry the risk, not you.</h2>
+    <div class="guarantee">
+      <div class="guarantee-tag">The Velocity Guarantee</div>
+      <h3>If your team does not move faster in 4 weeks, you pay nothing.</h3>
+      <p>After the first 4 weeks, if your team reports no measurable improvement in design velocity (fewer revisions, faster prototyping, less manual work), I refund 100% of what you have paid. <strong>And you keep the Design OS.</strong></p>
+    </div>
+  </section>
+
+  <!-- 05 TIERS -->
+  <section class="section">
+    <span class="section-label">05 / Three Paths</span>
+    <h2>Pick the depth that fits your goals.</h2>
+    <p>All three start May 2026. Flexible scheduling: 1 to 2 hour sessions, max 3 to 4 hours per week. Prices exclude BTW.</p>
+
+    <div class="tiers">
+      <div class="tier">
+        <div class="tier-name">Ignite</div>
+        <div class="tier-anchor">Value: &euro;9,500</div>
+        <div class="tier-price">&euro;4,500</div>
+        <div class="tier-duration">8 weeks / 16 hrs</div>
+        <div class="tier-what">Core AI tools, custom prompt library, tool stack recommendation. For teams that want fluency before process change.</div>
+      </div>
+      <div class="tier">
+        <div class="tier-name">Embed</div>
+        <div class="tier-anchor">Value: &euro;26,500</div>
+        <div class="tier-price">&euro;11,500</div>
+        <div class="tier-duration">12 weeks / 36 hrs</div>
+        <div class="tier-what">Everything in Ignite, plus Design OS setup, GitHub workflow, design system foundation, process playbook.</div>
+      </div>
+      <div class="tier rec">
+        <div class="tier-badge">Recommended</div>
+        <div class="tier-name">Transform</div>
+        <div class="tier-anchor">Value: &euro;56,100</div>
+        <div class="tier-price">&euro;24,500</div>
+        <div class="tier-duration">16 weeks / 48 hrs + async</div>
+        <div class="tier-what">Everything in Embed, plus team workshops, org-wide playbook, leadership review, async support.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 NEXT -->
+  <section class="section">
+    <span class="section-label">06 / Next Steps</span>
+    <h2>One call. Then we decide.</h2>
+    <p>A 30-minute scoping call is how we figure out which tier fits, or whether the programme is the right thing at all. No obligation, no pitch deck, no pressure.</p>
+    <div class="contact">
+      <div class="cta">Book the scoping call</div>
+      <div class="sub">30 minutes to align on fit, format, and timing.</div>
+      <div class="details">
+        <span><a href="mailto:sjoerd@idea8.be">sjoerd@idea8.be</a></span>
+        <span><a href="tel:+32491903798">+32 491 90 37 98</a></span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer class="footer">
+  Designed and built with Claude Code, one of the tools in the programme.<br>
+  Confidential. Prepared for Bridg / Nimbl. &copy; 2026 Sjoerd Faesen.
+</footer>
+
+</body>
+</html>
